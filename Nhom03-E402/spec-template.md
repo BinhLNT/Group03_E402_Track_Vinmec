@@ -25,7 +25,7 @@ Justify: Augmentation — lễ tân luôn nhìn thấy gợi ý và xác nhận 
 
 1. User correction đi vào đâu? -> Log cặp (chuỗi triệu chứng -> chuyên khoa lễ tân đã chọn thay thế) vào correction database. Dùng làm fine-tuning data hoặc few-shot examples cho prompt sau.
 2. Product thu signal gì để biết tốt lên hay tệ đi? -> (a) Tỷ lệ lễ tân giữ nguyên gợi ý AI (acceptance rate); (b) Tỷ lệ bệnh nhân phải chuyển khoa sau khi đã vào khám (downstream error rate); (c) Thời gian xử lý trung bình mỗi lượt.
-3. Data thuộc loại nào? ☐ User-specific · ☑ Domain-specific · ☐ Real-time · ☑ Human-judgment · ☐ Khác:
+3. Data thuộc loại nào? Domain-specific và Human-judgment.
    Có marginal value không? **Có** — dữ liệu triệu chứng -> chuyên khoa theo ngữ cảnh Vinmec (tên khoa, quy trình nội bộ, phân loại bệnh nhân VIP/thường) là domain-specific, model nền chưa biết. Mỗi correction của lễ tân là human-judgment label có giá trị cao.
 
 ---
