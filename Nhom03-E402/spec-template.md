@@ -34,18 +34,27 @@ Justify: Augmentation — lễ tân luôn nhìn thấy gợi ý và xác nhận 
 
 Mỗi feature chính = 1 bảng. AI trả lời xong → chuyện gì xảy ra?
 
-### Feature: *tên feature*
+### Feature 1: *AI gợi ý chuyên khoa và xếp phòng*
 
-**Trigger:** *VD: User nhận email mới → AI phân loại → ...*
+**Trigger:** *Bệnh nhân nhập triệu chứng → AI phân tích → gợi ý chuyên khoa + xếp phòng*
 
 | Path | Câu hỏi thiết kế | Mô tả |
 |------|-------------------|-------|
-| Happy — AI đúng, tự tin | User thấy gì? Flow kết thúc ra sao? | *Email tự gắn nhãn "Urgent", user thấy đúng, tiếp tục làm việc* |
-| Low-confidence — AI không chắc | System báo "không chắc" bằng cách nào? User quyết thế nào? | *Hiện 2 nhãn gợi ý + confidence %, user chọn 1* |
-| Failure — AI sai | User biết AI sai bằng cách nào? Recover ra sao? | *Email quan trọng bị gắn "FYI" → user thấy khi review → sửa nhãn* |
-| Correction — user sửa | User sửa bằng cách nào? Data đó đi vào đâu? | *Kéo thả sang nhãn đúng → correction log → cải thiện model* |
+| Happy — AI đúng, tự tin | User thấy gì? Flow kết thúc ra sao? | *AI gợi ý “Nội tổng quát”, lễ tân thấy hợp lý → chọn → điều hướng bệnh nhân* |
+| Low-confidence — AI không chắc | System báo "không chắc" bằng cách nào? User quyết thế nào? | *Hiện 2–3 chuyên khoa + confidence %, lễ tân chọn* |
+| Failure — AI sai | User biết AI sai bằng cách nào? Recover ra sao? | *AI gợi ý “Da liễu” nhưng triệu chứng đau ngực → lễ tân nhận ra → đổi sang “Tim mạch”*  |
+| Correction — user sửa | User sửa bằng cách nào? Data đó đi vào đâu? | *Lễ tân chọn lại chuyên khoa → lưu log → dùng để improve model* |
 
-*Lặp lại cho feature thứ 2-3 nếu có.*
+### Feature 2: *Cảnh báo triệu chứng nguy hiểm*
+
+**Trigger:** *AI phát hiện dấu hiệu nghiêm trọng từ triệu chứng*
+
+| Path | Câu hỏi thiết kế | Mô tả |
+|------|-------------------|-------|
+| Happy — AI đúng, tự tin | Alert hiển thị thế nào để không bị bỏ qua? | *AI detect “đau ngực, khó thở” → hiện cảnh báo đỏ “Có thể cấp cứu” → ưu tiên xử lý ngay* |
+| Low-confidence — AI không chắc | Khi chưa chắc là emergency? | *Hiện cảnh báo vàng + khuyến nghị kiểm tra thêm* |
+| Failure — AI sai | Nếu AI không nhận ra? | *Lễ tân phát hiện dấu hiệu nguy hiểm → chuyển khẩn cấp → đánh dấu missed case*  |
+| Correction — user sửa | Data đi đâu? | *Case được log → update rule-based + training để giảm false negative* |
 
 ---
 
