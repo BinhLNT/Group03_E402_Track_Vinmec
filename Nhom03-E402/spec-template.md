@@ -16,17 +16,17 @@
 |   | Value | Trust | Feasibility |
 |---|-------|-------|-------------|
 | **Câu hỏi** | User nào? Pain gì? AI giải gì? | Khi AI sai thì sao? User sửa bằng cách nào? | Cost/latency bao nhiêu? Risk chính? |
-| **Trả lời** | *Nhân viên văn phòng mất 30 phút/ngày phân loại email — AI gợi ý nhãn, giảm còn 5 phút* | *AI gắn sai nhãn → user thấy ngay, sửa 1 click, hệ thống học từ correction* | *~$0.01/email, latency <2s, risk: hallucinate nội dung nhạy cảm* |
+| **Trả lời** | Lễ tân | Người dùng và lễ tân đau. Thời gian phải chờ lễ tân chọn chuyên khoa, xếp phòng phù hợp từ mô tả triệu chứng của người dùng. AI từ danh sách các triệu chứng của bệnh nhân -> Đưa ra lựa chọn chuyên khoa và gợi ý xếp phòng phù hợp. | Chi phí API call, latency <3s. | Risk: Triệu chứng mô tả mơ hồ, nhiều khoa overlap.|
 
-**Automation hay augmentation?** ☐ Automation · ☐ Augmentation
-Justify: *Augmentation — user thấy gợi ý và chấp nhận/từ chối, cost of reject = 0*
+**Automation hay augmentation?** ☐ Automation · ☑ Augmentation
+Justify: *Augmentation — lễ tân luôn nhìn thấy gợi ý và xác nhận trước khi điều hướng bệnh nhân. AI sai thì lễ tân sửa trong 1 giây, không ảnh hưởng flow.*
 
 **Learning signal:**
 
-1. User correction đi vào đâu? ___
-2. Product thu signal gì để biết tốt lên hay tệ đi? ___
-3. Data thuộc loại nào? ☐ User-specific · ☐ Domain-specific · ☐ Real-time · ☐ Human-judgment · ☐ Khác: ___
-   Có marginal value không? (Model đã biết cái này chưa?) ___
+1. User correction đi vào đâu? -> Log cặp (chuỗi triệu chứng -> chuyên khoa lễ tân đã chọn thay thế) vào correction database. Dùng làm fine-tuning data hoặc few-shot examples cho prompt sau.
+2. Product thu signal gì để biết tốt lên hay tệ đi? -> (a) Tỷ lệ lễ tân giữ nguyên gợi ý AI (acceptance rate); (b) Tỷ lệ bệnh nhân phải chuyển khoa sau khi đã vào khám (downstream error rate); (c) Thời gian xử lý trung bình mỗi lượt.
+3. Data thuộc loại nào? ☐ User-specific · ☑ Domain-specific · ☐ Real-time · ☑ Human-judgment · ☐ Khác:
+   Có marginal value không? **Có** — dữ liệu triệu chứng -> chuyên khoa theo ngữ cảnh Vinmec (tên khoa, quy trình nội bộ, phân loại bệnh nhân VIP/thường) là domain-specific, model nền chưa biết. Mỗi correction của lễ tân là human-judgment label có giá trị cao.
 
 ---
 
