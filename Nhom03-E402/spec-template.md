@@ -70,7 +70,7 @@ Coverage: Đảm bảo AI hỗ trợ tốt ngay cả triệu chứng dài/không
 
 Average Processing Time Reduction: Đo lường trực tiếp bottleneck lớn nhất (xử lý nhanh hơn khi lượng bệnh nhân đông).
 
-CSAT: Khảo sát nhanh: “Bạn hài lòng với gợi ý chuyên khoa, mức độ khẩn cấp và bác sĩ của AI không?” (1–5 sao).
+CSAT: Khảo sát: “Bạn hài lòng với gợi ý chuyên khoa, mức độ khẩn cấp và bác sĩ của AI không?” (1–5 sao).
 
 Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-triage vì rủi ro sức khỏe cao nhất.
 ---
