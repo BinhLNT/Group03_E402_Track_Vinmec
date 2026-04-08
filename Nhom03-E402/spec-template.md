@@ -61,8 +61,14 @@ Mỗi feature chính = 1 bảng. AI trả lời xong → chuyện gì xảy ra?
 ## 3. Eval metrics + threshold
 
 **Optimize precision hay recall?** ☐ Precision · ☑ Recall
-Tại sao? ___
-Nếu sai ngược lại thì chuyện gì xảy ra? *VD: Nếu chọn precision nhưng low recall → user không tìm thấy kết quả cần → bỏ dùng*
+Tại sao? 
+
+Vì AI chỉ gợi ý (không quyết định cuối cùng), và tổn thất lớn nhất trong Problem Statement là phân loại sai ca nặng dẫn đến chậm trễ xử lý, rủi ro sức khỏe bệnh nhân. Recall cao giúp giảm nguy cơ bỏ sót chuyên khoa phù hợp (under-triage), đặc biệt với triệu chứng mơ hồ, không điển hình hoặc nghiêm trọng được mô tả nhẹ.
+Lễ tân có thể lọc bớt gợi ý thừa, nhưng nếu AI miss chuyên khoa đúng thì bệnh nhân rất dễ bị điều hướng sai mà lễ tân không nhận ra kịp.
+
+Nếu sai ngược lại thì chuyện gì xảy ra? 
+
+Nếu ưu tiên Precision cao nhưng Recall thấp → AI hay miss chuyên khoa đúng (ví dụ: triệu chứng đau ngực + khó thở chỉ gợi ý Nội thay vì Tim mạch/Cấp cứu). Lễ tân và bệnh nhân không biết có gợi ý tốt hơn → ca nặng bị chậm trễ, rủi ro sức khỏe tăng cao, trải nghiệm bệnh nhân kém, lễ tân bị trách nhiệm.
 
 | Metric | Threshold | Red flag (dừng khi) |
 |--------|-----------|---------------------|
