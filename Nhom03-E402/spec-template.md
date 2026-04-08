@@ -60,20 +60,23 @@ Mỗi feature chính = 1 bảng. AI trả lời xong → chuyện gì xảy ra?
 
 ## 3. Eval metrics + threshold
 
-**Optimize precision hay recall?** ☐ Precision · ☐ Recall
+**Optimize precision hay recall?** ☐ Precision · ☑ Recall
 Tại sao? ___
 Nếu sai ngược lại thì chuyện gì xảy ra? *VD: Nếu chọn precision nhưng low recall → user không tìm thấy kết quả cần → bỏ dùng*
 
 | Metric | Threshold | Red flag (dừng khi) |
 |--------|-----------|---------------------|
-| Precision@1 (chuyên khoa đúng nhất)  | ≥ 85%  | < 70% trong 7 ngày liên tục  |
-|  Precision@3 (top 3 gợi ý) | ≥ 95% | < 90% trong 7 ngày liên tục |
+| Recall@1 (chuyên khoa đúng nhất nằm trong top 1)  | ≥ 85%  | < 70% trong 7 ngày liên tục  |
+| Recall@3 (chuyên khoa đúng nằm trong top 3) | ≥ 95% | < 90% trong 7 ngày liên tục |
+| Precision@3 (để kiểm soát gợi ý thừa) | ≥ 60% |< 45% (quá nhiều gợi ý rác)
 | Coverage (tỷ lệ có gợi ý) | ≥ 90% | < 85% (AI từ chối trả lời hoặc “Tôi không chắc”) |
-|Average Processing Time Reduction (thời gian lễ tân xử lý mỗi bệnh nhân) | ≥ 40% | < 25% (không cải thiện bottleneck “đọc, quyết định và thao tác nhập máy thủ công”) |
-|CSAT (User Satisfaction - lễ tân) | ≥ 4.5/5 | < 4.0/5 (lễ tân phàn nàn nhiều về gợi ý sai hoặc không hữu ích) |
+| Average Processing Time Reduction (thời gian lễ tân xử lý mỗi bệnh nhân) | ≥ 40% | < 25% (không cải thiện bottleneck “đọc, quyết định và thao tác nhập máy thủ công”) |
+| CSAT (User Satisfaction - lễ tân) | ≥ 4.5/5 | < 4.0/5 (lễ tân phàn nàn nhiều về gợi ý sai hoặc không hữu ích) |
 | Safety Red Flag (bổ sung) | Miss rate nghiêm trọng ≤ 1.5% | > 3% ca nghiêm trọng (Đau ngực, khó thở, xuất huyết…) |
 
-Precision@1 & @3: Metric cốt lõi, đo trực tiếp success criteria “phân loại đúng trong đa số trường hợp”.
+Recall@1 và Recall@3: Metric cốt lõi, đo trực tiếp success criteria “phân loại đúng trong đa số trường hợp”.
+
+Precision@3: Tránh việcc gợi ý sai quá nhiều
 
 Coverage: Đảm bảo AI hỗ trợ tốt ngay cả triệu chứng dài/không rõ ràng.
 
@@ -91,9 +94,15 @@ Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-
 
 | # | Trigger | Hậu quả | Mitigation |
 |---|---------|---------|------------|
-| 1 | Triệu chứng dài, mơ hồ, không điển hình hoặc kết hợp nhiều hệ cơ quan (đau bụng + chóng mặt + mệt mỏi…) | AI suy luận bệnh khả nghi sai → gợi ý sai chuyên khoa/bác sĩ. Lễ tân (đang đông) tin và điều hướng sai mà không biết → phân loại sai, tăng thời gian chờ đợi, trải nghiệm kém. | - Luôn trả top-3 + confidence score<br>- Confidence < 65% → bắt buộc ghi “Gợi ý tham khảo, nên mô tả thêm hoặc hỏi lễ tân”<br>- Rule-based safety layer: keyword nguy hiểm (đau ngực, khó thở, tê nửa người, nôn máu…) |
-| 2 | Triệu chứng nghiêm trọng nhưng mô tả nhẹ/dùng từ thông thường (đau ngực nhẹ, khó thở thoáng qua…) | AI đánh giá mức độ khẩn cấp thấp hoặc gợi ý sai khoa (Nội thay vì Cấp cứu/Tim mạch). Lễ tân đang quá tải không biết và không ưu tiên → chậm xử lý ca nặng, rủi ro sức khỏe bệnh nhân. | - Hard-coded red-flag rules (ưu tiên cao nhất)<br>- Tất cả red-flag cases → bắt buộc gợi ý Cấp cứu + cảnh báo rõ ràng<br>- Cần human review toàn bộ red-flag cases hằng ngày |
-| 3 | Model over-confident trên case hiếm, triệu chứng không điển hình hoặc có bias | AI trả lời rất tự tin nhưng sai → lễ tân đang quá tải dễ tin hoàn toàn và hành động theo mà không biết bị sai. | - Sử dụng uncertainty calibration (trả về confidence score)<br>- Confidence < 70% → tone thận trọng<br>- Weekly retrain + active learning trên case lễ tân/bác sĩ sửa<br>- Theo dõi tỷ lệ các case mà AI và lễ tân/bác sĩ bất đồng ý kiến (<10%) |
+| 1 | Triệu chứng mơ hồ, dài dòng, không điển hình hoặc kết hợp nhiều hệ cơ quan | AI miss chuyên khoa đúng → Recall thấp. Lễ tân không nhận được gợi ý phù hợp → điều hướng sai khoa mà không biết. | - Tối ưu model theo hướng high-recall (temperature cao hơn, broader retrieval)<br>
+- Luôn trả top-3 + confidence<br>
+- Nếu confidence thấp → khuyến khích lễ tân hỏi thêm triệu chứng |
+| 2 | Triệu chứng nghiêm trọng nhưng mô tả nhẹ hoặc dùng từ thông thường | AI miss mức độ khẩn cấp và chuyên khoa cấp cứu/Tim mạch/Thần kinh… → Under-triage nghiêm trọng. Bệnh nhân và lễ tân không biết → rủi ro sức khỏe cao. | - Hard-coded red-flag rules (ưu tiên cực cao)<br>
+- Tất cả red-flag cases → bắt buộc gợi ý Cấp cứu + cảnh báo nổi bật<br>
+- Human review daily red-flag cases |
+| 3 | Model quá conservative hoặc bias trên case hiếm/không điển hình | Recall thấp trên một số nhóm triệu chứng → bỏ sót gợi ý đúng. Lễ tân dựa vào AI nhưng miss option quan trọng. | - Tập trung training data trên case khó + rare diseases <br>
+- Active learning trên case lễ tân/bác sĩ sửa <br>
+- Weekly retrain với trọng số recall |
 
 ---
 ## 5. ROI – 3 kịch bản
@@ -109,8 +118,9 @@ Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-
 - Net âm (cost > benefit) trong **2 tháng liên tục**.
 - Safety Red Flag (under-triage nghiêm trọng) > 3% trong 7 ngày liên tục.
 - CSAT của lễ tân < 4.0/5 trong 4 tuần liên tục.
-- Precision@1 < 70% trong 7 ngày liên tục mà không cải thiện sau retrain.
+- Recall@1 < 70% trong 7 ngày liên tục mà không cải thiện sau retrain.
 - Lễ tân không chấp nhận sử dụng (adoption rate < 40% sau 1 tháng).
+
 ---
 
 ## 6. Mini AI spec (1 trang)
