@@ -92,9 +92,9 @@ Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-
 |   | **Conservative** | **Realistic** | **Optimistic** |
 |---|------------------|---------------|----------------|
 | **Assumption** | 100 bệnh nhân/ngày<br>lễ tân sử dụng 40% thời gian<br>Giảm thời gian xử lý > 16% | 500 bệnh nhân/ngày<br>lễ tân sử dụng 60% thời gian<br>Giảm thời gian xử lý > 24% | 2000 bệnh nhân/ngày (bệnh viện lớn)<br>lễ tân sử dụng 90% thời gian<br>Giảm thời gian xử lý >36% |
-| **Cost** | 1 USD/ngày (~250.000 VND) inference + maintenance | 5 USD/ngày (~1,25 triệu VND) | 20 USD/ngày (~5 triệu VND) |
+| **Cost** | 1 USD/ngày (~25.000 VND) inference + maintenance | 7,5 USD/ngày (~200,000 VND) | 45 USD/ngày (~1,2 triệu VND) |
 | **Benefit** | Giảm ~1,2–2 giờ làm việc lễ tân/ngày<br> | Giảm ~1,8–3 giờ làm việc lễ tân/ngày<br> | Giảm ~3–4,5 giờ làm việc lễ tân/ngày<br> Giảm khiếu nại từ bệnh nhân |
-| **Net** | **+0,2 – 0,35 triệu VND/ngày** | **+1,9 – 2,5 triệu VND/ngày** | **+6 – 8 triệu VND/ngày** |
+| **Net** | **+0,025 – 0,05 triệu VND/ngày** | **+0,2 – 0,8 triệu VND/ngày** | **+1,2 – 8 triệu VND/ngày** |
 
 **Kill criteria (tiêu chí dừng dự án):**
 - Net âm (cost > benefit) trong **2 tháng liên tục**.
