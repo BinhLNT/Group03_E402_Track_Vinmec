@@ -101,12 +101,8 @@ Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-
 | # | Trigger | Hậu quả | Mitigation |
 |---|---------|---------|------------|
 | 1 | Triệu chứng mơ hồ, dài dòng, không điển hình hoặc kết hợp nhiều hệ cơ quan | AI miss chuyên khoa đúng → Recall thấp. Lễ tân không nhận được gợi ý phù hợp → điều hướng sai khoa mà không biết. | - Tối ưu model theo hướng high-recall (temperature cao hơn, broader retrieval)<br>- Luôn trả top-3 + confidence<br>- Nếu confidence thấp → khuyến khích lễ tân hỏi thêm triệu chứng<br> |
-| 2 | Triệu chứng nghiêm trọng nhưng mô tả nhẹ hoặc dùng từ thông thường | AI miss mức độ khẩn cấp và chuyên khoa cấp cứu/Tim mạch/Thần kinh… → Under-triage nghiêm trọng. Bệnh nhân và lễ tân không biết → rủi ro sức khỏe cao. | - Hard-coded red-flag rules (ưu tiên cực cao)<br>
-- Tất cả red-flag cases → bắt buộc gợi ý Cấp cứu + cảnh báo nổi bật<br>
-- Human review daily red-flag cases<br> |
-| 3 | Model quá conservative hoặc bias trên case hiếm/không điển hình | Recall thấp trên một số nhóm triệu chứng → bỏ sót gợi ý đúng. Lễ tân dựa vào AI nhưng miss option quan trọng. | - Tập trung training data trên case khó + rare diseases <br>
-- Active learning trên case lễ tân/bác sĩ sửa <br>
-- Weekly retrain với trọng số recall<br> |
+| 2 | Triệu chứng nghiêm trọng nhưng mô tả nhẹ hoặc dùng từ thông thường | AI miss mức độ khẩn cấp và chuyên khoa cấp cứu/Tim mạch/Thần kinh… → Under-triage nghiêm trọng. Bệnh nhân và lễ tân không biết → rủi ro sức khỏe cao. | - Hard-coded red-flag rules (ưu tiên cực cao)<br>- Tất cả red-flag cases → bắt buộc gợi ý Cấp cứu + cảnh báo nổi bật<br>- Human review daily red-flag cases<br> |
+| 3 | Model quá conservative hoặc bias trên case hiếm/không điển hình | Recall thấp trên một số nhóm triệu chứng → bỏ sót gợi ý đúng. Lễ tân dựa vào AI nhưng miss option quan trọng. | - Tập trung training data trên case khó + rare diseases <br>- Active learning trên case lễ tân/bác sĩ sửa <br>- Weekly retrain với trọng số recall<br> |
 
 ---
 ## 5. ROI – 3 kịch bản
