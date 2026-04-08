@@ -16,10 +16,10 @@
 |   | Value | Trust | Feasibility |
 |---|-------|-------|-------------|
 | **Câu hỏi** | User nào? Pain gì? AI giải gì? | Khi AI sai thì sao? User sửa bằng cách nào? | Cost/latency bao nhiêu? Risk chính? |
-| **Trả lời** | Lễ tân | Người dùng và lễ tân đau. Thời gian phải chờ lễ tân chọn chuyên khoa, xếp phòng phù hợp từ mô tả triệu chứng của người dùng. AI từ danh sách các triệu chứng của bệnh nhân -> Đưa ra lựa chọn chuyên khoa và gợi ý xếp phòng phù hợp. | Chi phí API call, latency <3s. | Risk: Triệu chứng mô tả mơ hồ, nhiều khoa overlap.|
+| **Trả lời** | Lễ tân | Bệnh nhân và lễ tân đau. Thời gian phải chờ lễ tân chọn chuyên khoa, xếp phòng phù hợp từ mô tả triệu chứng của người dùng. AI từ danh sách các triệu chứng của bệnh nhân -> Đưa ra lựa chọn chuyên khoa và gợi ý xếp phòng phù hợp. | Chi phí API call, latency <3s. | Risk: Triệu chứng mô tả mơ hồ, nhiều khoa overlap.|
 
 **Automation hay augmentation?** ☐ Automation · ☑ Augmentation
-Justify: *Augmentation — lễ tân luôn nhìn thấy gợi ý và xác nhận trước khi điều hướng bệnh nhân. AI sai thì lễ tân sửa trong 1 giây, không ảnh hưởng flow.*
+Justify: Augmentation — lễ tân luôn nhìn thấy gợi ý và xác nhận trước khi điều hướng bệnh nhân. AI sai thì lễ tân sửa trong 1 giây, không ảnh hưởng flow.
 
 **Learning signal:**
 
