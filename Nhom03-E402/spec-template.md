@@ -134,3 +134,9 @@ Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-
 - Rủi ro chính nằm ở việc AI có thể gợi ý sai trong các ca mơ hồ hoặc nghiêm trọng, nên cần luôn giữ lễ tân trong vòng kiểm soát, đồng thời thiết kế các cơ chế fallback rõ ràng để giảm thiểu sai sót.
 
 ![alt text](image.png)
+
+## Phân công
+- Khải: Canvas + Problem statement
+- Tuấn: User stories 4 paths
+- Trí: Eval metrics + ROI + threshold
+- Bình: Top 3 failures test + Mini AI spec
