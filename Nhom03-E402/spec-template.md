@@ -57,10 +57,22 @@ Nếu sai ngược lại thì chuyện gì xảy ra? *VD: Nếu chọn precision
 
 | Metric | Threshold | Red flag (dừng khi) |
 |--------|-----------|---------------------|
-| *VD: Accuracy phân loại đúng* | *≥85%* | *<70% trong 1 tuần* |
-|   |   |   |
-|   |   |   |
+| Precision@1 (chuyên khoa đúng nhất)  | ≥ 85%  | < 70% trong 7 ngày liên tục  |
+|  Precision@3 (top 3 gợi ý) | ≥ 95% | < 90% trong 7 ngày liên tục |
+| Coverage (tỷ lệ có gợi ý) | ≥ 90% | < 85% (AI từ chối trả lời hoặc “Tôi không chắc”) |
+|Average Processing Time Reduction (thời gian lễ tân xử lý mỗi bệnh nhân) | ≥ 40% | < 25% (không cải thiện bottleneck “đọc, quyết định và thao tác nhập máy thủ công”) |
+|CSAT (User Satisfaction - lễ tân) | ≥ 4.5/5 | < 4.0/5 (lễ tân phàn nàn nhiều về gợi ý sai hoặc không hữu ích) |
+| Safety Red Flag (bổ sung) | Miss rate nghiêm trọng ≤ 1.5% | > 3% ca nghiêm trọng (Đau ngực, khó thở, xuất huyết…) |
 
+Precision@1 & @3: Metric cốt lõi, đo trực tiếp success criteria “phân loại đúng trong đa số trường hợp”.
+
+Coverage: Đảm bảo AI hỗ trợ tốt ngay cả triệu chứng dài/không rõ ràng.
+
+Average Processing Time Reduction: Đo lường trực tiếp bottleneck lớn nhất (xử lý nhanh hơn khi lượng bệnh nhân đông).
+
+CSAT: Khảo sát nhanh: “Bạn hài lòng với gợi ý chuyên khoa, mức độ khẩn cấp và bác sĩ của AI không?” (1–5 sao).
+
+Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-triage vì rủi ro sức khỏe cao nhất.
 ---
 
 ## 4. Top 3 failure modes
@@ -70,23 +82,26 @@ Nếu sai ngược lại thì chuyện gì xảy ra? *VD: Nếu chọn precision
 
 | # | Trigger | Hậu quả | Mitigation |
 |---|---------|---------|------------|
-| 1 | *VD: Email chứa thuật ngữ ngoài domain* | *AI gắn nhãn sai, tự tin cao* | *Detect low-confidence → hỏi user xác nhận* |
-| 2 |   |   |   |
-| 3 |   |   |   |
+| 1 | Triệu chứng dài, mơ hồ, không điển hình hoặc kết hợp nhiều hệ cơ quan (đau bụng + chóng mặt + mệt mỏi…) | AI suy luận bệnh khả nghi sai → gợi ý sai chuyên khoa/bác sĩ. Lễ tân (đang đông) tin và điều hướng sai mà không biết → phân loại sai, tăng thời gian chờ đợi, trải nghiệm kém. | - Luôn trả top-3 + confidence score<br>- Confidence < 65% → bắt buộc ghi “Gợi ý tham khảo, nên mô tả thêm hoặc hỏi lễ tân”<br>- Rule-based safety layer: keyword nguy hiểm (đau ngực, khó thở, tê nửa người, nôn máu…) |
+| 2 | Triệu chứng nghiêm trọng nhưng mô tả nhẹ/dùng từ thông thường (đau ngực nhẹ, khó thở thoáng qua…) | AI đánh giá mức độ khẩn cấp thấp hoặc gợi ý sai khoa (Nội thay vì Cấp cứu/Tim mạch). Lễ tân đang quá tải không biết và không ưu tiên → chậm xử lý ca nặng, rủi ro sức khỏe bệnh nhân. | - Hard-coded red-flag rules (ưu tiên cao nhất)<br>- Tất cả red-flag cases → bắt buộc gợi ý Cấp cứu + cảnh báo rõ ràng<br>- Cần human review toàn bộ red-flag cases hằng ngày |
+| 3 | Model over-confident trên case hiếm, triệu chứng không điển hình hoặc có bias | AI trả lời rất tự tin nhưng sai → lễ tân đang quá tải dễ tin hoàn toàn và hành động theo mà không biết bị sai. | - Sử dụng uncertainty calibration (trả về confidence score)<br>- Confidence < 70% → tone thận trọng<br>- Weekly retrain + active learning trên case lễ tân/bác sĩ sửa<br>- Theo dõi tỷ lệ các case mà AI và lễ tân/bác sĩ bất đồng ý kiến (<10%) |
 
 ---
+## 5. ROI – 3 kịch bản
 
-## 5. ROI 3 kịch bản
+|   | **Conservative** | **Realistic** | **Optimistic** |
+|---|------------------|---------------|----------------|
+| **Assumption** | 100 bệnh nhân/ngày<br>lễ tân sử dụng 40% thời gian<br>Giảm thời gian xử lý > 16% | 500 bệnh nhân/ngày<br>lễ tân sử dụng 60% thời gian<br>Giảm thời gian xử lý > 24% | 2000 bệnh nhân/ngày (bệnh viện lớn)<br>lễ tân sử dụng 90% thời gian<br>Giảm thời gian xử lý >36% |
+| **Cost** | 1 USD/ngày (~250.000 VND) inference + maintenance | 5 USD/ngày (~1,25 triệu VND) | 20 USD/ngày (~5 triệu VND) |
+| **Benefit** | Giảm ~1,2–2 giờ làm việc lễ tân/ngày<br> | Giảm ~1,8–3 giờ làm việc lễ tân/ngày<br> | Giảm ~3–4,5 giờ làm việc lễ tân/ngày<br> Giảm khiếu nại từ bệnh nhân |
+| **Net** | **+0,2 – 0,35 triệu VND/ngày** | **+1,9 – 2,5 triệu VND/ngày** | **+6 – 8 triệu VND/ngày** |
 
-|   | Conservative | Realistic | Optimistic |
-|---|-------------|-----------|------------|
-| **Assumption** | *100 user/ngày, 60% hài lòng* | *500 user/ngày, 80% hài lòng* | *2000 user/ngày, 90% hài lòng* |
-| **Cost** | *$50/ngày inference* | *$200/ngày* | *$500/ngày* |
-| **Benefit** | *Giảm 2h support/ngày* | *Giảm 8h/ngày* | *Giảm 20h, tăng retention 5%* |
-| **Net** |   |   |   |
-
-**Kill criteria:** *Khi nào nên dừng? VD: cost > benefit 2 tháng liên tục*
-
+**Kill criteria (tiêu chí dừng dự án):**
+- Net âm (cost > benefit) trong **2 tháng liên tục**.
+- Safety Red Flag (under-triage nghiêm trọng) > 3% trong 7 ngày liên tục.
+- CSAT của lễ tân < 4.0/5 trong 4 tuần liên tục.
+- Precision@1 < 70% trong 7 ngày liên tục mà không cải thiện sau retrain.
+- Lễ tân không chấp nhận sử dụng (adoption rate < 40% sau 1 tháng).
 ---
 
 ## 6. Mini AI spec (1 trang)
