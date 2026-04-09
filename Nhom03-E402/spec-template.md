@@ -63,12 +63,9 @@ Mỗi feature chính = 1 bảng. AI trả lời xong → chuyện gì xảy ra?
 **Optimize precision hay recall?** ☐ Precision · ☑ Recall
 Tại sao? 
 
-Vì AI chỉ gợi ý (không quyết định cuối cùng), và tổn thất lớn nhất trong Problem Statement là phân loại sai ca nặng dẫn đến chậm trễ xử lý, rủi ro sức khỏe bệnh nhân. Recall cao giúp giảm nguy cơ bỏ sót chuyên khoa phù hợp (under-triage), đặc biệt với triệu chứng mơ hồ, không điển hình hoặc nghiêm trọng được mô tả nhẹ.
-Lễ tân có thể lọc bớt gợi ý thừa, nhưng nếu AI miss chuyên khoa đúng thì bệnh nhân rất dễ bị điều hướng sai mà lễ tân không nhận ra kịp.
+Vì AI đảm nhận bước sàng lọc ban đầu (hỏi triệu chứng → gợi ý chuyên khoa), mục tiêu quan trọng nhất là không bỏ sót chuyên khoa phù hợp, đặc biệt với ca nghiêm trọng. Recall cao giúp giảm under-triage, tránh tình trạng bệnh nhân bị điều hướng sai hoặc chậm trễ do AI miss gợi ý đúng.
 
-Nếu sai ngược lại thì chuyện gì xảy ra? 
-
-Nếu ưu tiên Precision cao nhưng Recall thấp → AI hay miss chuyên khoa đúng (ví dụ: triệu chứng đau ngực + khó thở chỉ gợi ý Nội thay vì Tim mạch/Cấp cứu). Lễ tân và bệnh nhân không biết có gợi ý tốt hơn → ca nặng bị chậm trễ, rủi ro sức khỏe tăng cao, trải nghiệm bệnh nhân kém, lễ tân bị trách nhiệm.
+NNếu ưu tiên Precision mà Recall thấp → AI hay bỏ sót chuyên khoa đúng → lễ tân/tổng đài không nhận được gợi ý phù hợp → bệnh nhân vẫn phải chờ lâu hoặc đi sai hướng, không giải quyết được bài toán hàng chờ và áp lực nhân viên.
 
 | Metric | Threshold | Red flag (dừng khi) |
 |--------|-----------|---------------------|
@@ -91,6 +88,7 @@ Average Processing Time Reduction: Đo lường trực tiếp bottleneck lớn n
 CSAT: Khảo sát: “Bạn hài lòng với gợi ý chuyên khoa, mức độ khẩn cấp và bác sĩ của AI không?” (1–5 sao).
 
 Safety Red Flag: Monitor riêng (rule-based + human review) – ưu tiên under-triage vì rủi ro sức khỏe cao nhất.
+
 ---
 
 ## 4. Top 3 failure modes
